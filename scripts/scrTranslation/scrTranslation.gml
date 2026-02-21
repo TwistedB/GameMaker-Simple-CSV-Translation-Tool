@@ -1,12 +1,28 @@
-//Add later a file to add languages easily
-global.languages = ["EN"]
+//Read languages.txt to see what languages are available
+var file = file_text_open_read("lang/languages.txt");
 
-//Set English as default language
-global.locale = global.languages[0];
+global.languages = [];
+
+while (!file_text_eof(file))
+{
+    var line = file_text_read_string(file);
+    file_text_readln(file); // move to next line
+    
+    array_push(global.languages, line);
+}
+
+file_text_close(file);
+
+//Set the first line in the array as default language
+global.languageNumber = 0;
+global.locale = global.languages[global.languageNumber];
 InitTranslations();
 
 function InitTranslations()
 {
+	//setting language to languageNumber
+	global.locale = global.languages[global.languageNumber];
+	
 	//Grabbing CSV file for selected language (file must be named the same as it is called in global.languages)
 	//text is stored in the lang included file
 	global.locData = load_csv("lang/" + global.locale + ".csv");
@@ -41,5 +57,3 @@ function Text(key)
 	//Load the text that is related to the key and return as a string
 	return text;
 }
-
-//Ill make a better version with portraits later i guess
